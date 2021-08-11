@@ -1,0 +1,31 @@
+pipeline {
+    agent any
+     tools {
+        // Install the Maven version configured as "M3" and add it to the path.
+        maven "maven-3.8.1"
+    }
+    stages {
+        stage('fetch') {
+            steps {
+                git credentialsId: 'github-cred', url: 'https://github.com/dilish2691/remote-comp-repo.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                //tool name: 'maven-3.8.1', type: 'maven-3.8.1'
+                sh 'mvn clean package'
+            }
+        }
+    }
+    post {
+        success {
+              sh 'aws s3 cp /var/lib/jenkins/workspace/pipeline/target/LoginRegisterApp.war s3://dili/'
+         }
+        unstable {
+              echo "Gear up ! The build is unstable. Try fix it"
+         }
+        failure {
+             echo "OMG ! The build failed"
+         }
+    }
+}
