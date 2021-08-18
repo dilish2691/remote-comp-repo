@@ -1,0 +1,37 @@
+pipeline {
+     agent any
+     tools {
+        maven 'maven-3.8.1'
+        //jdk 'jdk8'
+    }
+
+     stages {
+         
+        stage('fetch code') {
+              steps {
+                 git 'https://github.com/dilish2691/remote-comp-repo.git'
+              }
+         }
+         
+         stage('build step') {
+              steps {
+                 //tool name: 'maven-3.8.1', type: 'maven'
+                 sh 'mvn clean package'
+              }
+         }
+     }
+     post {
+         always {
+             s3Upload consoleLogLevel: 'INFO', dontSetBuildResultOnFailure: false, dontWaitForConcurrentBuildCompletion: false, entries: [[bucket: 'dili', excludedFile: 'target', flatten: true, gzipFiles: false, keepForever: false, managedArtifacts: false, noUploadOnFailure: true, selectedRegion: 'ap-south-1', showDirectlyInBrowser: false, sourceFile: '*/*.war', storageClass: 'STANDARD', uploadFromSlave: false, useServerSideEncryption: false]], pluginFailureResultConstraint: 'FAILURE', profileName: 's3profile', userMetadata: []
+         }
+         success {
+              echo "I am running because the job ran successfully"
+         }
+         unstable {
+              echo "Gear up ! The build is unstable. Try fix it"
+         }
+         failure {
+             echo "OMG ! The build failed"
+         }
+     }
+}
