@@ -19,10 +19,17 @@ pipeline {
                  sh 'mvn clean package'
               }
          }
+         stage('copy war file to s3') {
+              steps {
+                 
+                 s3Upload consoleLogLevel: 'INFO', dontSetBuildResultOnFailure: false, dontWaitForConcurrentBuildCompletion: false, entries: [[bucket: 'dili', excludedFile: 'target', flatten: true, gzipFiles: false, keepForever: false, managedArtifacts: false, noUploadOnFailure: true, selectedRegion: 'ap-south-1', showDirectlyInBrowser: false, sourceFile: '*/*.war', storageClass: 'STANDARD', uploadFromSlave: false, useServerSideEncryption: false]], pluginFailureResultConstraint: 'FAILURE', profileName: 's3profile', userMetadata: []
+              }
+         }
      }
      post {
          always {
-             s3Upload consoleLogLevel: 'INFO', dontSetBuildResultOnFailure: false, dontWaitForConcurrentBuildCompletion: false, entries: [[bucket: 'dili', excludedFile: 'target', flatten: true, gzipFiles: false, keepForever: false, managedArtifacts: false, noUploadOnFailure: true, selectedRegion: 'ap-south-1', showDirectlyInBrowser: false, sourceFile: '*/*.war', storageClass: 'STANDARD', uploadFromSlave: false, useServerSideEncryption: false]], pluginFailureResultConstraint: 'FAILURE', profileName: 's3profile', userMetadata: []
+             sshPublisher(publishers: [sshPublisherDesc(configName: 'ansiblecontroller', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '''ansible-playbook /etc/ansible/tomcatPlaybook.yml 
+ansible-playbook /etc/ansible/apachePlaybook.yml''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: true)])
          }
          success {
               echo "I am running because the job ran successfully"
@@ -35,3 +42,4 @@ pipeline {
          }
      }
 }
+
