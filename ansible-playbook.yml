@@ -1,5 +1,6 @@
 ---
-- name: Play1 for copying files
+- name: 'Play 1 for copying files'
+  gather_facts: no
   hosts: docker-manager
   become: yes
   tasks:
@@ -23,7 +24,8 @@
       tags:
         - copy_code
 
-- name: "Play 2- python installation"
+- name: "Play 2 python installation"
+  gather_facts: no
   hosts: docker-manager
   become: yes
   tasks:
@@ -49,6 +51,7 @@
         var: out2
 
 - name: "Play 3 Install Python packages and docker image push"
+  gather_facts: no
   hosts: docker-manager
   become: yes
   vars:
@@ -56,14 +59,15 @@
   tasks:
     - name: Install boto3 and botocore with pip3 module
       pip:
-        name:
-         - boto
-         - boto3
-         - botocore
-         - docker
-         - jsondiff
-         - pyyaml
-        executable: pip3.6
+       name:
+        - boto
+        - boto3
+        - botocore
+        - docker
+          #- docker-py
+        - jsondiff
+        - pyyaml
+       executable: pip3.6
       register: out3
       tags: docker-lib-install
     - debug:
@@ -94,7 +98,8 @@
     - debug:
         var: out5
 
-- name: "Play 3 docker stack deploy"
+- name: "Play 4 docker stack deploy"
+  gather_facts: no
   hosts: docker-manager
   become: yes
   tasks:
@@ -116,5 +121,4 @@
       register: out6
       tags: docker-stack-deploy
     - debug:
-        var: out6
-
+            var: out6
