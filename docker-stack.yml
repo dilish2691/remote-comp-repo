@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   tomcat:
-    image: 127.0.0.1:5000/Login
+    image: 127.0.0.1:5000/trainingwaleapp
     #build: .
     deploy:
       replicas: 2
@@ -16,9 +16,9 @@ services:
       resources:
         limits:
           cpus: '0.50'
-          memory: 20M
+          memory: 200M
         reservations:
           cpus: '0.25'
-          memory: 10M
+          memory: 100M
     ports:
       - "8080:8080"

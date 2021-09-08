@@ -56,15 +56,14 @@
   tasks:
     - name: Install boto3 and botocore with pip3 module
       pip:
-       name:
-        - boto
-        - boto3
-        - botocore
-        - docker
-          #- docker-py
-        - jsondiff
-        - pyyaml
-       executable: pip3.6
+        name:
+         - boto
+         - boto3
+         - botocore
+         - docker
+         - jsondiff
+         - pyyaml
+        executable: pip3.6
       register: out3
       tags: docker-lib-install
     - debug:
@@ -113,7 +112,7 @@
         state: present
         name: trainingwale
         compose:
-          - /tmp/training-com/trainingwale.yml
+          - /tmp/training-com/docker-stack.yml
       register: out6
       tags: docker-stack-deploy
     - debug:
