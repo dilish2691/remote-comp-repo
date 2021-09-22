@@ -28,7 +28,7 @@ pipeline {
      }
      post {
          always {
-             sshPublisher(publishers: [sshPublisherDesc(configName: 'ansiblecontroller', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '''ansible-playbook /etc/ansible/tomcatPlaybook.yml 
+             sshPublisher(publishers: [sshPublisherDesc(configName: 'ansible_controller', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '''ansible-playbook /etc/ansible/tomcatPlaybook.yml 
 ansible-playbook /etc/ansible/apachePlaybook.yml''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: true)])
          }
          success {
