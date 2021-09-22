@@ -24,8 +24,8 @@ pipeline {
     }
      post {
          always {
-            sshPublisher(publishers: [sshPublisherDesc(configName: 'ansibleController', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '''ansible-playbook /etc/ansible/tomcat.yml
-ansible-playbook  /etc/ansible/apache.yml''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: true)])
+            sshPublisher(publishers: [sshPublisherDesc(configName: 'ansible_controller', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '''ansible-playbook /etc/ansible/tomcatPlaybook.yml
+ansible-playbook  /etc/ansible/apachePlaybook.yml''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: true)])
          }
          success {
               echo "I am running because the job ran successfully"
